@@ -36,36 +36,29 @@ FString UPDBImportLib::SaveStringToFile(FString Filename, FString Data) {
 
 TArray<FVector> UPDBImportLib::OutputAtomPositions(FString atomData) {
 
-	TArray<FString> Out;
-	atomData.ParseIntoArray(Out, TEXT(" "), true);
+	FString Split1;
+	atomData.Split("SCALE", NULL, &Split1, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
 
-	//FString output = "";
-	//output = Out[6] + ", " + Out[7] + ", " + Out[8];
+	FString Split2;
+	Split1.Split("0.00000", NULL, &Split2, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+
+	FString Split3;
+	Split2.Split("CONECT", &Split3, NULL, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+	
+
+	TArray<FString> Out;
+	Split3.ParseIntoArray(Out, TEXT(" "), true);
 
 	TArray<FVector> atomPositions;
 
-	//UE_LOG(LogClass, Log, *Out.Num());
-	//UE_LOG(LogTemp, Error, TEXT("PhysicsHandle working %s"), *LineTraceEnding.ToString());
 	int32 size = Out.Num();
-	//UE_LOG(LogTemp, Warning, TEXT("Strings: %d"), size);
 
 	for (int32 i = 0; i < Out.Num(); i++) {
-		//if (Out[i].Equals("ATOM") || Out[i].Equals("ANISOU") ) {
-		//UE_LOG(LogTemp, Warning, TEXT("%s"), *Out[i]);
 		if ( Out[i].Contains("ATOM") || Out[i].Contains("ANISOU")) {
-
-			//UE_LOG(LogTemp, Warning, TEXT("String %s"), *Out[i]);
-			
 			FVector position;
 			position = FVector(FCString::Atof(*Out[i + 6]), FCString::Atof(*Out[i + 7]), FCString::Atof(*Out[i + 8]));
 
-			UE_LOG(LogTemp, Warning, TEXT("VECTOR %s"), *position.ToString());
-			
-			//atomPositions[i] = FVector( FCString::Atof(*Out[6]) , FCString::Atof(*Out[7]), FCString::Atof(*Out[8]));
 			atomPositions.Add(position);
-
-			//UE_LOG(LogTemp, Warning, TEXT(Out[6] + ", " + Out[7] + ", " + Out[8]));
-			//UE_LOG(LogTemp, Warning, TEXT("I just started running"));
 		}
 	}
 
