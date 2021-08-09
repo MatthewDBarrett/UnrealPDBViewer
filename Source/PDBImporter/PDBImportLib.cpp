@@ -52,11 +52,20 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString atomData) {
 	for (int32 i = 0; i < Out.Num(); i++) {
 		//if (Out[i].Equals("ATOM") || Out[i].Equals("ANISOU") ) {
 		//UE_LOG(LogTemp, Warning, TEXT("%s"), *Out[i]);
-		if ( Out[i] == "ATOM" ) {
+		if ( Out[i].Contains("ATOM") || Out[i].Contains("ANISOU")) {
+
+			//UE_LOG(LogTemp, Warning, TEXT("String %s"), *Out[i]);
+			
+			FVector position;
+			position = FVector(FCString::Atof(*Out[i + 6]), FCString::Atof(*Out[i + 7]), FCString::Atof(*Out[i + 8]));
+
+			UE_LOG(LogTemp, Warning, TEXT("VECTOR %s"), *position.ToString());
+			
 			//atomPositions[i] = FVector( FCString::Atof(*Out[6]) , FCString::Atof(*Out[7]), FCString::Atof(*Out[8]));
+			atomPositions.Add(position);
 
 			//UE_LOG(LogTemp, Warning, TEXT(Out[6] + ", " + Out[7] + ", " + Out[8]));
-			UE_LOG(LogTemp, Warning, TEXT("I just started running"));
+			//UE_LOG(LogTemp, Warning, TEXT("I just started running"));
 		}
 	}
 
