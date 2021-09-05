@@ -5,6 +5,7 @@
 #include <cctype>
 #include <string>
 #include <iostream>
+#include "Atom.h"
 
 bool is_number(const std::string& s)
 {
@@ -18,40 +19,19 @@ bool has_any_digits(const std::string& s)
 	return std::any_of(s.begin(), s.end(), ::isdigit);
 }
 
-FString UPDBImportLib::LoadFileToString(FString Filename) {
+TArray<FVector> GetAtomPositions(TArray<Atom> atoms) {
+	TArray<FVector> atomPositions;
 
-	FString directory = FPaths::ProjectContentDir();
-	//FString directory = FPaths::GameSourceDir();
-	FString result;
-	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
-
-	if (file.CreateDirectory(*directory)) {
-		//FString myFile = directory + "/PDB_Files" + "/" + Filename;
-		FString myFile = directory + "/" + Filename;
-		FFileHelper::LoadFileToString(result, *myFile);
+	for (int i = 0; i < atoms.Num(); i++) {
+		atomPositions.Add(atoms[i].GetPosition());
 	}
 
-	return result;
-}
-
-FString UPDBImportLib::SaveStringToFile(FString Filename, FString Data) {
-	FString directory = FPaths::ProjectContentDir();
-	//FString directory = FPaths::GameSourceDir();
-	FString result;
-	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
-
-	if (file.CreateDirectory(*directory)) {
-		//FString myFile = directory + "/PDB_Files" + "/" + Filename;
-		FString myFile = directory + "/" + Filename;
-		FFileHelper::SaveStringToFile(Data, *myFile);
-	}
-
-	return Filename;
+	return atomPositions;
 }
 
 TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 
-	TArray<FVector> atomPositions;
+	TArray<Atom> atoms;
 
 	FString directory = FPaths::ProjectContentDir();
 	FString atomData;
@@ -78,45 +58,26 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 		for (int32 i = 0; i < atomRecords.Num(); i++) {
 			if (atomRecords[i].Contains("ATOM") || atomRecords[i].Contains("ANISOU") || atomRecords[i].Contains("HETATM")) {
 
-				int32 count = 0;
-				
 				for (int j = 1; j < 7; j++) {
 
 					FString sample = atomRecords[i + j];
 					std::string test2 = std::string(TCHAR_TO_UTF8(*sample));
-
-					//if (is_number(test2)) {
-						//UE_LOG(LogTemp, Warning, TEXT("Num: %s"), *atomRecords[i + j]);
-					//	count++;
-					//}
 
 					if (!is_number(test2)) {
 						FString sample2 = atomRecords[i + j + 1];
 						std::string test3 = std::string(TCHAR_TO_UTF8(*sample2));
 
 						if (has_any_digits(test3)) {
-							FVector position;
-							position = FVector(FCString::Atof(*atomRecords[i + j + 2]), FCString::Atof(*atomRecords[i + j + 3]), FCString::Atof(*atomRecords[i + j + 4]));
-
-							atomPositions.Add(position);
+							atoms.Add( Atom(FCString::Atof(*atomRecords[i + j + 2]), FCString::Atof(*atomRecords[i + j + 3]), FCString::Atof(*atomRecords[i + j + 4])) );
 							break;
 						}
-					}
-
-					if (count == 3) {
-						//FVector position;
-						//position = FVector(FCString::Atof(*atomRecords[i + j]), FCString::Atof(*atomRecords[i + j + 1]), FCString::Atof(*atomRecords[i + j + 2]));
-
-						//atomPositions.Add(position);
-						//break;
 					}
 				}	
 			}
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("total atoms: %d"), atomPositions.Num());
+		UE_LOG(LogTemp, Warning, TEXT("total atoms: %d"), atoms.Num());
 
 	}
-
-	return atomPositions;
+	return GetAtomPositions( atoms );
 }
