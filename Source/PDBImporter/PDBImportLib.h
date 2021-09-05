@@ -25,5 +25,5 @@ class PDBIMPORTER_API UPDBImportLib : public UBlueprintFunctionLibrary
 
 		//This Functin takes in atom records from PDB Files and outputs their co-ordinates in a 3D Array.
 		UFUNCTION(BlueprintCallable, Category = "PDB")
-		static TArray<FVector> OutputAtomPositions(FString atomData);
+		static TArray<FVector> OutputAtomPositions(FString fileName);
 };

@@ -1,4 +1,5 @@
 #include "PDBImportLib.h"
+#include <sstream>
 
 FString UPDBImportLib::LoadFileToString(FString Filename) {
 
@@ -31,32 +32,41 @@ FString UPDBImportLib::SaveStringToFile(FString Filename, FString Data) {
 	return Filename;
 }
 
-TArray<FVector> UPDBImportLib::OutputAtomPositions(FString atomData) {
-
-	FString Split1;
-	atomData.Split("SCALE", NULL, &Split1, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
-
-	FString Split2;
-	Split1.Split("0.00000", NULL, &Split2, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
-
-	FString Split3;
-	Split2.Split("CONECT", &Split3, NULL, ESearchCase::IgnoreCase, ESearchDir::FromStart);
-
-
-	TArray<FString> Out;
-	Split3.ParseIntoArray(Out, TEXT(" "), true);
+TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 
 	TArray<FVector> atomPositions;
 
-	int32 size = Out.Num();
+	FString directory = FPaths::ProjectContentDir();
+	FString atomData;
+	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
 
-	for (int32 i = 0; i < Out.Num(); i++) {
-		if (Out[i].Contains("ATOM") || Out[i].Contains("ANISOU")) {
-			FVector position;
-			position = FVector(FCString::Atof(*Out[i + 6]), FCString::Atof(*Out[i + 7]), FCString::Atof(*Out[i + 8]));
+	if (file.CreateDirectory(*directory)) {
+		FString myFile = directory + "/" + fileName + ".pdb";
+		FFileHelper::LoadFileToString(atomData, *myFile);
 
-			atomPositions.Add(position);
+		FString Split1;
+		atomData.Split("SCALE", NULL, &Split1, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+
+		FString Split2;
+		Split1.Split("0.00000", NULL, &Split2, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+
+		FString Split3;
+		Split2.Split("CONECT", &Split3, NULL, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+
+		TArray<FString> atomRecords;
+		Split3.ParseIntoArray(atomRecords, TEXT(" "), true);
+
+		int32 size = atomRecords.Num();
+
+		for (int32 i = 0; i < atomRecords.Num(); i++) {
+			if (atomRecords[i].Contains("ATOM") || atomRecords[i].Contains("ANISOU")) {
+				FVector position;
+				position = FVector(FCString::Atof(*atomRecords[i + 6]), FCString::Atof(*atomRecords[i + 7]), FCString::Atof(*atomRecords[i + 8]));
+
+				atomPositions.Add(position);
+			}
 		}
+
 	}
 
 	return atomPositions;
