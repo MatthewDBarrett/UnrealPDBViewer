@@ -5,18 +5,18 @@
 class Atom {
 
 public:
-	Atom(FString type, int serialNum, FString atomName, int branchIndicator, FString residueType, FString chainIdentifier,
-		int residueSequenceNum, double xPos, double yPos, double zPos);
-	Atom(double xPos, double yPos, double zPos);
+	Atom(FString type, int32 serialNum, FString atomName, int32 branchIndicator, FString residueType, FString chainIdentifier,
+		int32 residueSequenceNum, double xPos, double yPos, double zPos);
+	Atom(FString type, int32 serialNum, double xPos, double yPos, double zPos);
 	~Atom();
 
 	FString GetType();
-	int GetSerialNum();
+	int32 GetSerialNum();
 	FString GetAtomName();
-	int GetBranchIndicator();
+	int32 GetBranchIndicator();
 	FString GetResidueType();
 	FString GetChainIdentifier();
-	int GetResidueSequenceNum();
+	int32 GetResidueSequenceNum();
 	double GetXPos();
 	double GetYPos();
 	double GetZPos();
@@ -25,12 +25,12 @@ public:
 	
 private:
 	FString type;
-	int serialNum;
+	int32 serialNum;
 	FString atomName;
-	int branchIndicator;
+	int32 branchIndicator;
 	FString residueType;
 	FString chainIdentifier;
-	int residueSequenceNum;
+	int32 residueSequenceNum;
 	double xPos;
 	double yPos;
 	double zPos;

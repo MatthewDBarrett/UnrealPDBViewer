@@ -1,7 +1,7 @@
 #include "Atom.h"
 
-Atom::Atom(FString type, int serialNum, FString atomName, int branchIndicator, FString residueType, FString chainIdentifier,
-	int residueSequenceNum, double xPos, double yPos, double zPos) {
+Atom::Atom(FString type, int32 serialNum, FString atomName, int32 branchIndicator, FString residueType, FString chainIdentifier,
+	int32 residueSequenceNum, double xPos, double yPos, double zPos) {
 
 	this->type = type;
 	this->serialNum = serialNum;
@@ -15,7 +15,9 @@ Atom::Atom(FString type, int serialNum, FString atomName, int branchIndicator, F
 	this->zPos = zPos;
 }
 
-Atom::Atom(double xPos, double yPos, double zPos) {
+Atom::Atom(FString type, int32 serialNum, double xPos, double yPos, double zPos) {
+	this->type = type;
+	this->serialNum = serialNum;
 	this->xPos = xPos;
 	this->yPos = yPos;
 	this->zPos = zPos;
@@ -29,17 +31,17 @@ FVector Atom::GetPosition() { return FVector(xPos, yPos, zPos); }
 
 FString Atom::GetType() { return type; }
 
-int Atom::GetSerialNum() { return serialNum; }
+int32 Atom::GetSerialNum() { return serialNum; }
 
 FString Atom::GetAtomName() { return atomName; }
 
-int Atom::GetBranchIndicator() { return branchIndicator; }
+int32 Atom::GetBranchIndicator() { return branchIndicator; }
 
 FString Atom::GetResidueType() { return residueType; }
 
 FString Atom::GetChainIdentifier() { return chainIdentifier; }
 
-int Atom::GetResidueSequenceNum() { return residueSequenceNum; }
+int32 Atom::GetResidueSequenceNum() { return residueSequenceNum; }
 
 double Atom::GetXPos() { return xPos; }
 
