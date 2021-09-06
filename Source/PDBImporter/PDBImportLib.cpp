@@ -89,3 +89,53 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 	}
 	return GetAtomPositions( atoms );
 }
+
+TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
+	TArray<Atom> atoms;
+
+	FString directory = FPaths::ProjectContentDir();
+	FString atomData;
+	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
+
+	if (file.CreateDirectory(*directory)) {
+		FString myFile = directory + "/" + fileName + ".pdb";
+		FFileHelper::LoadFileToString(atomData, *myFile);
+
+		TArray<FString> stringRecords;
+		atomData.ParseIntoArray(stringRecords, TEXT(" "), true);
+
+		for (int32 i = 0; i < stringRecords.Num(); i++) {
+			if (stringRecords[i].Contains("ATOM") || stringRecords[i].Contains("ANISOU") || stringRecords[i].Contains("HETATM")) {
+				if (stringRecords[i + 1].IsNumeric()) {
+					for (int j = 1; j < 7; j++) {
+
+						FString sample = stringRecords[i + j];
+						std::string test2 = std::string(TCHAR_TO_UTF8(*sample));
+
+						if (!is_number(test2)) {
+							FString sample2 = stringRecords[i + j + 1];
+							std::string test3 = std::string(TCHAR_TO_UTF8(*sample2));
+
+							FString atomName = stringRecords[i + 2];							//Atom Type
+							atomName = atomName.LeftChop(stringRecords[i + 2].Len() - 1);
+
+							if (has_any_digits(test3)) {
+								atoms.Add(Atom(stringRecords[i], FCString::Atoi(*stringRecords[i + 1]), atomName, FCString::Atof(*stringRecords[i + j + 2]), 
+									FCString::Atof(*stringRecords[i + j + 3]), FCString::Atof(*stringRecords[i + j + 4])));
+								break;
+							}
+						}
+					}
+				}
+			}
+
+		}
+		UE_LOG(LogTemp, Warning, TEXT("total atoms records: %d"), atoms.Num());
+
+		for (int k = 0; k < atoms.Num(); k++) {
+			FString temp = atoms[k].GetAtomName();
+			UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *temp);
+		}
+	}
+	return GetAtomPositions(atoms);
+}
