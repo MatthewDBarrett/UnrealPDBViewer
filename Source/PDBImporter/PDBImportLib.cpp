@@ -71,7 +71,7 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 						atomName = atomName.LeftChop( atomRecords[i + 2].Len() - 1 );
 
 						if (has_any_digits(test3)) {
-							atoms.Add( Atom(atomRecords[i], FCString::Atoi(*atomRecords[i + 1]), atomName, FCString::Atof(*atomRecords[i + j + 2]), FCString::Atof(*atomRecords[i + j + 3]), FCString::Atof(*atomRecords[i + j + 4])) );
+							//atoms.Add( Atom(atomRecords[i], FCString::Atoi(*atomRecords[i + 1]), atomName, FCString::Atof(*atomRecords[i + j + 2]), FCString::Atof(*atomRecords[i + j + 3]), FCString::Atof(*atomRecords[i + j + 4])) );
 							break;
 						}
 					}
@@ -110,18 +110,22 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
 					for (int j = 1; j < 7; j++) {
 
 						FString sample = stringRecords[i + j];
-						std::string test2 = std::string(TCHAR_TO_UTF8(*sample));
+						std::string sampleString = std::string(TCHAR_TO_UTF8(*sample));
 
-						if (!is_number(test2)) {
+						if (!is_number(sampleString)) {
 							FString sample2 = stringRecords[i + j + 1];
-							std::string test3 = std::string(TCHAR_TO_UTF8(*sample2));
+							std::string sampleString2 = std::string(TCHAR_TO_UTF8(*sample2));
 
-							FString atomName = stringRecords[i + 2];							//Atom Type
-							atomName = atomName.LeftChop(stringRecords[i + 2].Len() - 1);
+							if (has_any_digits(sampleString2)) {
+								FString elementName;
+								for (int o = 7; o < 12; o++)
+									if (stringRecords[i + j + o].Contains("ATOM") || stringRecords[i + j + o].Contains("ANISOU") ||
+										stringRecords[i + j + o].Contains("HETATM") || stringRecords[i + j + o].Contains("TER")) {
+										elementName = stringRecords[i + j + o - 1];
+									}
 
-							if (has_any_digits(test3)) {
-								atoms.Add(Atom(stringRecords[i], FCString::Atoi(*stringRecords[i + 1]), atomName, FCString::Atof(*stringRecords[i + j + 2]), 
-									FCString::Atof(*stringRecords[i + j + 3]), FCString::Atof(*stringRecords[i + j + 4])));
+								atoms.Add(Atom(stringRecords[i], FCString::Atoi(*stringRecords[i + 1]), FCString::Atof(*stringRecords[i + j + 2]), 
+									FCString::Atof(*stringRecords[i + j + 3]), FCString::Atof(*stringRecords[i + j + 4]), elementName));
 								break;
 							}
 						}

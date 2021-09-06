@@ -1,7 +1,7 @@
 #include "Atom.h"
 
 Atom::Atom(FString type, int32 serialNum, FString atomName, int32 branchIndicator, FString residueType, FString chainIdentifier,
-	int32 residueSequenceNum, double xPos, double yPos, double zPos) {
+	int32 residueSequenceNum, double xPos, double yPos, double zPos, FString elementSymbol) {
 
 	this->type = type;
 	this->serialNum = serialNum;
@@ -15,13 +15,13 @@ Atom::Atom(FString type, int32 serialNum, FString atomName, int32 branchIndicato
 	this->zPos = zPos;
 }
 
-Atom::Atom(FString type, int32 serialNum, FString atomName, double xPos, double yPos, double zPos) {
+Atom::Atom(FString type, int32 serialNum, double xPos, double yPos, double zPos, FString elementSymbol) {
 	this->type = type;
 	this->serialNum = serialNum;
-	this->atomName = atomName;
 	this->xPos = xPos;
 	this->yPos = yPos;
 	this->zPos = zPos;
+	this->elementSymbol = elementSymbol;
 }
 
 Atom::~Atom() {
@@ -49,3 +49,5 @@ double Atom::GetXPos() { return xPos; }
 double Atom::GetYPos() { return yPos; }
 
 double Atom::GetZPos() { return zPos; }
+
+FString Atom::GetElementSymbol() { return elementSymbol; }
