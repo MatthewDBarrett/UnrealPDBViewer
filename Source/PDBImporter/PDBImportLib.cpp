@@ -64,11 +64,14 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 					std::string test2 = std::string(TCHAR_TO_UTF8(*sample));
 
 					if (!is_number(test2)) {
-						FString sample2 = atomRecords[i + j + 1];
+						FString sample2 = atomRecords[i + j + 1];						
 						std::string test3 = std::string(TCHAR_TO_UTF8(*sample2));
 
+						FString atomName = atomRecords[i + 2];							//Atom Type
+						atomName = atomName.LeftChop( atomRecords[i + 2].Len() - 1 );
+
 						if (has_any_digits(test3)) {
-							atoms.Add( Atom(atomRecords[i], FCString::Atoi(*atomRecords[i + 1]), FCString::Atof(*atomRecords[i + j + 2]), FCString::Atof(*atomRecords[i + j + 3]), FCString::Atof(*atomRecords[i + j + 4])) );
+							atoms.Add( Atom(atomRecords[i], FCString::Atoi(*atomRecords[i + 1]), atomName, FCString::Atof(*atomRecords[i + j + 2]), FCString::Atof(*atomRecords[i + j + 3]), FCString::Atof(*atomRecords[i + j + 4])) );
 							break;
 						}
 					}
@@ -76,11 +79,11 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 			}
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("total atoms: %d"), atoms.Num());
+		UE_LOG(LogTemp, Warning, TEXT("total atoms records: %d"), atoms.Num());
 
 		for (int k = 0; k < atoms.Num(); k++) {
-			int temp = atoms[k].GetSerialNum();
-			UE_LOG(LogTemp, Warning, TEXT("serial num: %d"), temp);
+			FString temp = atoms[k].GetAtomName();
+			UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *temp);
 		}
 
 	}

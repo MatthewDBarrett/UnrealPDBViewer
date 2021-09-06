@@ -15,9 +15,10 @@ Atom::Atom(FString type, int32 serialNum, FString atomName, int32 branchIndicato
 	this->zPos = zPos;
 }
 
-Atom::Atom(FString type, int32 serialNum, double xPos, double yPos, double zPos) {
+Atom::Atom(FString type, int32 serialNum, FString atomName, double xPos, double yPos, double zPos) {
 	this->type = type;
 	this->serialNum = serialNum;
+	this->atomName = atomName;
 	this->xPos = xPos;
 	this->yPos = yPos;
 	this->zPos = zPos;
