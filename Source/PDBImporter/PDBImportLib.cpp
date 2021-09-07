@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include "Atom.h"
+#include "Molecule.h"
 
 bool is_number(const std::string& s)
 {
@@ -27,6 +28,60 @@ TArray<FVector> GetAtomPositions(TArray<Atom> atoms) {
 	}
 
 	return atomPositions;
+}
+
+double GetAtomSize(FString elementName) {
+	FString directory = FPaths::ProjectContentDir();
+	FString atomData;
+	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
+
+	if (file.CreateDirectory(*directory)) {
+		FString myFile = directory + "/atomData.art";
+		FFileHelper::LoadFileToString(atomData, *myFile);
+
+		FString Split1;
+		atomData.Split("START", NULL, &Split1, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+
+		FString Split2;
+		Split1.Split("END", &Split2, NULL, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+
+		TArray<FString> stringRecords;
+		Split2.ParseIntoArray(stringRecords, TEXT(" "), true);
+
+		for (int32 i = 0; i < stringRecords.Num(); i++) {
+			if (stringRecords[i].Contains( elementName )) {
+				return FCString::Atod(*stringRecords[i + 2]);
+			}
+		}
+	}
+
+	return 0;
+}
+
+bool isConnection(Atom a, Atom b) {
+	FVector aPos = a.GetPosition();
+	FVector bPos = b.GetPosition();
+
+	double aRadius = ( GetAtomSize(a.GetElementSymbol()) ) / 2;
+	double bRadius = ( GetAtomSize(b.GetElementSymbol()) ) / 2;
+
+	double distance = (aPos - bPos).Size();
+
+	if (distance - aRadius - bRadius <= 0)
+		return true;
+	else
+		return false;
+}
+
+void computeConnections(TArray<Atom> atoms) {
+	AMolecule mol;
+	for (int i = 0; i < atoms.Num(); i++) {
+		for (int j = 0; j < atoms.Num(); j++) {
+			if (isConnection(atoms[i], atoms[j])) {
+				//mol.RenderConnection(atoms[i].GetPosition(), atoms[j].GetPosition());
+			}
+		}
+	}
 }
 
 TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
@@ -105,7 +160,7 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
 		atomData.ParseIntoArray(stringRecords, TEXT(" "), true);
 
 		for (int32 i = 0; i < stringRecords.Num(); i++) {
-			if (stringRecords[i].Contains("ATOM") || stringRecords[i].Contains("ANISOU") || stringRecords[i].Contains("HETATM")) {
+			if (stringRecords[i].Contains("ATOM") || stringRecords[i].Contains("ANI@SOU") || stringRecords[i].Contains("HET@ATM")) {
 				if (stringRecords[i + 1].IsNumeric()) {
 					for (int j = 1; j < 7; j++) {
 
@@ -118,13 +173,16 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
 
 							if (has_any_digits(sampleString2)) {
 								FString elementName;
-								for (int o = 7; o < 12; o++)
+
+								for (int o = 0; o < 10; o++) {
 									if (stringRecords[i + j + o].Contains("ATOM") || stringRecords[i + j + o].Contains("ANISOU") ||
 										stringRecords[i + j + o].Contains("HETATM") || stringRecords[i + j + o].Contains("TER")) {
 										elementName = stringRecords[i + j + o - 1];
+										break;
 									}
+								}
 
-								atoms.Add(Atom(stringRecords[i], FCString::Atoi(*stringRecords[i + 1]), FCString::Atof(*stringRecords[i + j + 2]), 
+								atoms.Add(Atom(stringRecords[i], FCString::Atoi(*stringRecords[i + 1]), FCString::Atof(*stringRecords[i + j + 2]),
 									FCString::Atof(*stringRecords[i + j + 3]), FCString::Atof(*stringRecords[i + j + 4]), elementName));
 								break;
 							}
@@ -137,8 +195,9 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
 		UE_LOG(LogTemp, Warning, TEXT("total atoms records: %d"), atoms.Num());
 
 		for (int k = 0; k < atoms.Num(); k++) {
-			FString temp = atoms[k].GetAtomName();
-			UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *temp);
+			FString temp = atoms[k].GetElementSymbol();
+			FString size = FString::SanitizeFloat(GetAtomSize(atoms[k].GetElementSymbol()));
+			UE_LOG(LogTemp, Warning, TEXT("atom Name: %s size: %s"), *temp, *size);
 		}
 	}
 	return GetAtomPositions(atoms);
