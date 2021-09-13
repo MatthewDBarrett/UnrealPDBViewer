@@ -73,18 +73,31 @@ bool isConnection(Atom a, Atom b) {
 		return false;
 }
 
-void computeConnections(TArray<Atom> atoms) {
-	AMolecule mol;
+TArray<FVector> computeStartConnections(TArray<Atom> atoms) {
+	TArray<FVector> startConnections;
 	for (int i = 0; i < atoms.Num(); i++) {
 		for (int j = 0; j < atoms.Num(); j++) {
 			if (isConnection(atoms[i], atoms[j])) {
-				//mol.RenderConnection(atoms[i].GetPosition(), atoms[j].GetPosition());
+				startConnections.Add(atoms[i]);
 			}
 		}
 	}
+	return startConnections;
 }
 
-TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
+TArray<FVector> computeEndConnections(TArray<Atom> atoms) {
+	TArray<FVector> endConnections;
+	for (int i = 0; i < atoms.Num(); i++) {
+		for (int j = 0; j < atoms.Num(); j++) {
+			if (isConnection(atoms[i], atoms[j])) {
+				endConnections.Add(atoms[j]);
+			}
+		}
+	}
+	return endConnections;
+}
+
+TArray<FVector> UPDBImportLib::OutputAtoms(FString fileName) {
 
 	TArray<Atom> atoms;
 
@@ -145,7 +158,7 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions(FString fileName) {
 	return GetAtomPositions( atoms );
 }
 
-TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
+TArray<Atom> UPDBImportLib::OutputAtoms2(FString fileName) {
 	TArray<Atom> atoms;
 
 	FString directory = FPaths::ProjectContentDir();
@@ -200,5 +213,23 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
 			UE_LOG(LogTemp, Warning, TEXT("atom Name: %s size: %s"), *temp, *size);
 		}
 	}
-	return GetAtomPositions(atoms);
+	return atoms;
+}
+
+TArray<FVector> UPDBImportLib::OutputAtomCon1(TArray<Atom> atoms) {
+	return computeStartConnections( atoms );
+}
+
+TArray<FVector> UPDBImportLib::OutputAtomCon2(TArray<Atom> atoms) {
+	return computeEndConnections( atoms );
+}
+
+TArray<FVector> UPDBImportLib::OutputAtomPositions(TArray<Atom> atoms) {
+	TArray<FVector> atomPositions;
+
+	for (int i = 0; i < atoms.Num(); i++) {
+		atomPositions.Add(atoms[i].GetPosition());
+	}
+
+	return atomPositions;
 }
