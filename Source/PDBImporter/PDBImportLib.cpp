@@ -202,3 +202,13 @@ TArray<FVector> UPDBImportLib::OutputAtomPositions2(FString fileName) {
 	}
 	return GetAtomPositions(atoms);
 }
+
+TArray<FVector> UPDBImportLib::OutputStartConnections(FString fileName)
+{
+	return TArray<FVector>();
+}
+
+TArray<FVector> UPDBImportLib::OutputEndConnections(FString fileName)
+{
+	return TArray<FVector>();
+}
