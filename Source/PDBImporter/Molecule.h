@@ -35,7 +35,7 @@ public:
 
 	void SetAtomSizes();
 
-	FString moleculeName = "1plc";
+	FString moleculeName = "3nir";
 
 	TArray<Atom> atoms;
 

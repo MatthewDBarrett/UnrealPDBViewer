@@ -132,9 +132,9 @@ void AMolecule::ConvertPDB(FString fileName) {
 									}
 								}
 
-								int32 xPos = FCString::Atof(*stringRecords[i + j + 2]);
-								int32 yPos = FCString::Atof(*stringRecords[i + j + 3]);
-								int32 zPos = FCString::Atof(*stringRecords[i + j + 4]);
+								double xPos = FCString::Atof(*stringRecords[i + j + 2]);
+								double yPos = FCString::Atof(*stringRecords[i + j + 3]);
+								double zPos = FCString::Atof(*stringRecords[i + j + 4]);
 
 								Atom tempAtom = Atom(stringRecords[i], FCString::Atoi(*stringRecords[i + 1]), xPos, yPos, zPos, elementName);
 
