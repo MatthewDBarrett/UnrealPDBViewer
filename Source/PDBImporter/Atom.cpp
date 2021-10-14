@@ -30,6 +30,10 @@ Atom::~Atom() {
 
 FVector Atom::GetPosition() { return FVector(xPos, yPos, zPos); }
 
+void Atom::SetRadius(double radius) { atomRadius = radius; }
+
+double Atom::GetRadius() { return atomRadius; }
+
 FString Atom::GetType() { return type; }
 
 int32 Atom::GetSerialNum() { return serialNum; }

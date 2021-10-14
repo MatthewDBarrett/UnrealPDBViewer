@@ -23,6 +23,9 @@ public:
 	FString GetElementSymbol();
 
 	FVector GetPosition();
+
+	void SetRadius(double radius);
+	double GetRadius();
 	
 private:
 	FString type;
@@ -36,5 +39,7 @@ private:
 	double yPos;
 	double zPos;
 	FString elementSymbol;
+
+	double atomRadius;
 
 };
