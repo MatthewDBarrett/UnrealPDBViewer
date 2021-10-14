@@ -6,6 +6,7 @@
 #include "Atom.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "InstancedStaticMeshActor.h"
 
 // Sets default values
 AMolecule::AMolecule()
@@ -19,6 +20,12 @@ AMolecule::AMolecule()
 void AMolecule::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FActorSpawnParameters SpawnParams;
+	FVector pos = FVector(0, 0, 0);
+	FRotator rot = FRotator(0, 0, 0);
+
+	instancedStaticMeshActor = GetWorld()->SpawnActor<AActor>(StaticMeshToSpawn, pos, rot, SpawnParams);
 
 	this->ConvertPDB(moleculeName);
 	this->SetAtomSizes();
@@ -164,9 +171,22 @@ void AMolecule::SpawnAtoms() {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
 		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
-		double size = atom.GetRadius();
+		double size = ( atom.GetRadius() / atomScale ) * simulationScale;
 
-		this->SpawnSphere(position, size, atom.GetElementSymbol());
+		//this->SpawnSphere(position, size, atom.GetElementSymbol());
+		
+		FRotator rot = FRotator(0, 0, 0);
+		FVector scale = FVector(size, size, size);
+		
+		FTransform transform = FTransform(rot, position, scale);
+		
+		AInstancedStaticMeshActor* meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
+		
+		if (meshPointer != nullptr) {
+			meshPointer->InstanceAtom(transform);
+		}
+		//UE_LOG(LogTemp, Log, TEXT("name: %s"), *test);
+
 	}
 }
 

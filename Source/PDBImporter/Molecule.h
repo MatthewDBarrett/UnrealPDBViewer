@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Atom.h"
+#include "InstancedStaticMeshActor.h"
 #include "Molecule.generated.h"
 
 UCLASS()
@@ -30,10 +31,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> ActorToSpawn;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	TSubclassOf<AActor> StaticMeshToSpawn;
+
 	TArray<FString> atomNames;
 	TArray<double> atomSizes;
 
 	void SetAtomSizes();
+
+	UPROPERTY()
+	AActor* instancedStaticMeshActor;
 
 	FString moleculeName = "3nir";
 
@@ -43,11 +50,11 @@ public:
 
 	int32 simulationScale = 50;
 
-	double atomScale = 150;
+	double atomScale = 200;
 
 	int32 searchBuffer = 10;
 
-	double connectionThickness = 0.2f;
+	double connectionThickness = 0.1f;
 
 	bool renderConnections = true;
 
