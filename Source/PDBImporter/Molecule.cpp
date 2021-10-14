@@ -166,11 +166,11 @@ void AMolecule::SpawnAtoms() {
 		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
 		double size = atom.GetRadius();
 
-		this->SpawnSphere(position, size);
+		this->SpawnSphere(position, size, atom.GetElementSymbol());
 	}
 }
 
-void AMolecule::SpawnSphere(FVector position, double size) {
+void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {
 	FActorSpawnParameters SpawnParams;
 	FRotator rotation = FRotator(0.0f, 0.0f, 0.0f);
 	atomCount++;
@@ -178,11 +178,11 @@ void AMolecule::SpawnSphere(FVector position, double size) {
 	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, position, rotation, SpawnParams);
 	SpawnedActorRef->SetActorScale3D(FVector((size / atomScale) * simulationScale));
 
-	FString label = (TEXT("Atom_"));							//String Formatting
+	atomName.Append( "-Atom_" );							//String Formatting
 	FString CountString = FString::FromInt(atomCount);
-	label.Append(CountString);
+	atomName.Append(CountString);
 
-	SpawnedActorRef->SetActorLabel(label);					//Setting Label
+	SpawnedActorRef->SetActorLabel( atomName );					//Setting Label
 }
 
 void AMolecule::SpawnConnections() {

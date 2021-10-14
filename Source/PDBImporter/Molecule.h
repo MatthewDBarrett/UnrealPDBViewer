@@ -21,7 +21,7 @@ public:
 
 	void SpawnAtoms();
 
-	void SpawnSphere(FVector position, double size);
+	void SpawnSphere(FVector position, double size, FString atomName);
 
 	void SpawnConnections();
 
