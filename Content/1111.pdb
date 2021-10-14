@@ -23,13 +23,19 @@ JRNL        REF    ACTA CRYSTALLOGR.,SECT.F      V.  67   424 2011
 JRNL        REFN                   ESSN 1744-3091
 JRNL        PMID   21505232
 JRNL        DOI    10.1107/S1744309110052607
-ATOM      1  C  ATHR A   1       0.000 1.000  0.000  1.00  16.00         C
-ATOM      2  C  ATHR A   1       1.000 1.000  1.300  1.00  16.00         C
-ATOM      3  C  ATHR A   1       1.000 1.000 -1.300  1.00  16.00         C
-ATOM      4  C  ATHR A   1       3.500 1.000  0.000  1.00  16.00         C
-ATOM      5  C  ATHR A   1       2.500 1.000  1.300  1.00  16.00         C
-ATOM      6  C  ATHR A   1       2.500 1.000 -1.300  1.00  16.00         C
-TER       7
+ATOM      1  C  ATHR A   1       0.000 1.000  0.000  1.00  16.00           C \n
+ATOM      2  C  ATHR A   1       1.000 1.000  1.300  1.00  16.00           C \n
+ATOM      3  C  ATHR A   1       1.000 1.000 -1.300  1.00  16.00           C \n
+ATOM      4  C  ATHR A   1       3.500 1.000  0.000  1.00  16.00           C \n
+ATOM      5  C  ATHR A   1       2.500 1.000  1.300  1.00  16.00           C \n
+ATOM      6  C  ATHR A   1       2.500 1.000 -1.300  1.00  16.00           C \n
+ATOM      7  C  ATHR A   1       0.000 2.500  0.000  1.00  16.00           C \n
+ATOM      8  C  ATHR A   1       1.000 2.500  1.300  1.00  16.00           C \n
+ATOM      9  C  ATHR A   1       1.000 2.500 -1.300  1.00  16.00           C \n
+ATOM      10  C  ATHR A   1       3.500 2.500  0.000  1.00  16.00           C \n
+ATOM      11  C  ATHR A   1       2.500 2.500  1.300  1.00  16.00           C \n
+ATOM      12  C  ATHR A   1       2.500 2.500 -1.300  1.00  16.00           C \n
+TER       13
 CONECT   1  2
 CONECT   3  4
 CONECT   5  6

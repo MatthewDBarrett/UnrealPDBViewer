@@ -214,10 +214,12 @@ void AMolecule::SpawnConnections() {
 
 				int32 overlappedIndex = (FCString::Atoi(*Right) - 1);
 
-				if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
-					if (this->isConnection(atom, atoms[overlappedIndex])) {
-						connectionCount++;
-						this->SpawnCylinder(atom.GetPosition() * simulationScale, atoms[overlappedIndex].GetPosition() * simulationScale);
+				if (overlappedIndex < atom.GetSerialNum()) {
+					if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
+						if (this->isConnection(atom, atoms[overlappedIndex])) {
+							connectionCount++;
+							this->SpawnCylinder(atom.GetPosition() * simulationScale, atoms[overlappedIndex].GetPosition() * simulationScale);
+						}
 					}
 				}
 			}

@@ -43,11 +43,11 @@ public:
 
 	int32 simulationScale = 50;
 
-	double atomScale = 200;
+	double atomScale = 150;
 
 	int32 searchBuffer = 10;
 
-	double connectionThickness = 0.05f;
+	double connectionThickness = 0.2f;
 
 	bool renderConnections = true;
 
