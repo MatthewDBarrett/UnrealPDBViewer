@@ -231,7 +231,7 @@ void AMolecule::SpawnConnections() {
 }
 
 void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {
-	DrawDebugLine(GetWorld(), atomPos1, atomPos2, FColor::Emerald, true, -1, 0, connectionThickness * simulationScale);
+	DrawDebugLine(GetWorld(), atomPos1, atomPos2, FColor::White, true, -1, 0, connectionThickness * simulationScale);
 }
 
 
