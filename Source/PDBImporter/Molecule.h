@@ -37,12 +37,14 @@ public:
 	TArray<FString> atomNames;
 	TArray<double> atomSizes;
 
+	AInstancedStaticMeshActor* meshPointer;
+
 	void SetAtomSizes();
 
 	UPROPERTY()
 	AActor* instancedStaticMeshActor;
 
-	FString moleculeName = "3nir";
+	FString moleculeName = "1111";
 
 	TArray<Atom> atoms;
 

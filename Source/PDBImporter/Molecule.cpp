@@ -27,6 +27,8 @@ void AMolecule::BeginPlay()
 
 	instancedStaticMeshActor = GetWorld()->SpawnActor<AActor>(StaticMeshToSpawn, pos, rot, SpawnParams);
 
+	meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
+
 	this->ConvertPDB(moleculeName);
 	this->SetAtomSizes();
 
@@ -167,8 +169,7 @@ void AMolecule::ConvertPDB(FString fileName) {
 }
 
 void AMolecule::SpawnAtoms() {
-	AInstancedStaticMeshActor* meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
-
+	int32 count = 1;
 	for (Atom atom : atoms) {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
@@ -184,8 +185,14 @@ void AMolecule::SpawnAtoms() {
 		
 		if (meshPointer != nullptr) {
 			meshPointer->InstanceAtom(transform);
+			double randValue = FMath::RandRange(0, 100);
+			UE_LOG(LogTemp, Log, TEXT("value1: %d"), randValue);
+			double rand = randValue / 100;
+			UE_LOG(LogTemp, Log, TEXT("value2: %d"), rand);
+			meshPointer->SetCustomData(count, 0, rand, true);
 		}
 		//UE_LOG(LogTemp, Log, TEXT("name: %s"), *test);	
+		count++;
 	}
 	meshPointer->RemoveInitialInstance();
 
@@ -227,8 +234,9 @@ void AMolecule::SpawnConnections() {
 
 		for (AActor* overlappedActor : outActors) {
 			FString overlappedName = overlappedActor->GetName();
-			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), *overlappedActor->GetName());
-			if (overlappedName.Contains("Atom")) {
+			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), *overlappedActor->GetActorTransform().GetScale3D().ToString());
+			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), meshPointer->setcustom);
+			if (overlappedName.Contains("ATOM")) {
 				
 				FString Left, Right;
 				overlappedName.Split(TEXT("_"), &Left, &Right);

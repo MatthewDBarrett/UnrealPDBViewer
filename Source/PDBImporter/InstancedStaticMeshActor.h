@@ -17,6 +17,8 @@ public:
 
 	void RemoveInitialInstance();
 
+	void SetCustomData(int32 index, int32 dataIndex, double dataValue, bool stateDirty);
+
 	UPROPERTY(VisibleAnywhere)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;
 
