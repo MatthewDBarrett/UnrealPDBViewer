@@ -167,6 +167,8 @@ void AMolecule::ConvertPDB(FString fileName) {
 }
 
 void AMolecule::SpawnAtoms() {
+	AInstancedStaticMeshActor* meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
+
 	for (Atom atom : atoms) {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
@@ -180,14 +182,13 @@ void AMolecule::SpawnAtoms() {
 		
 		FTransform transform = FTransform(rot, position, scale);
 		
-		AInstancedStaticMeshActor* meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
-		
 		if (meshPointer != nullptr) {
 			meshPointer->InstanceAtom(transform);
 		}
-		//UE_LOG(LogTemp, Log, TEXT("name: %s"), *test);
-
+		//UE_LOG(LogTemp, Log, TEXT("name: %s"), *test);	
 	}
+	meshPointer->RemoveInitialInstance();
+
 }
 
 void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {

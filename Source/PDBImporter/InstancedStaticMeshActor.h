@@ -15,6 +15,8 @@ public:
 
 	void InstanceAtom(FTransform instanceTransform);
 
+	void RemoveInitialInstance();
+
 	UPROPERTY(VisibleAnywhere)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;
 
