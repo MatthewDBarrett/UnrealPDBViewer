@@ -30,6 +30,7 @@ void AMolecule::BeginPlay()
 	meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
 
 	this->SetAtomTypes();
+	this->SetAtomColours();
 
 	this->ConvertPDB(moleculeName);
 	this->SetAtomSizes();
@@ -123,6 +124,41 @@ void AMolecule::SetAtomTypes() {
 	atomTypes.Add(TEXT("Ra"));
 	atomTypes.Add(TEXT("Ti"));
 	atomTypes.Add(TEXT("Fe"));
+}
+
+void AMolecule::SetAtomColours() {
+	atomColours.Add(FVector(255, 255, 255));		//H
+	atomColours.Add(FVector(144, 144, 144));		//C
+	atomColours.Add(FVector(48,  80,  248));		//N
+	atomColours.Add(FVector(255, 13,  13));			//O
+	atomColours.Add(FVector(144, 224, 80));			//F
+	atomColours.Add(FVector(31,  240, 31));			//Cl
+	atomColours.Add(FVector(166, 41,  41));			//Br
+	atomColours.Add(FVector(148, 0,   148));		//I
+	atomColours.Add(FVector(217, 255, 255));		//He
+	atomColours.Add(FVector(179, 227, 245));		//Ne
+	atomColours.Add(FVector(128, 209, 227));		//Ar
+	atomColours.Add(FVector(92,  184, 209));		//Kr
+	atomColours.Add(FVector(66,  158, 176));		//Xe
+	atomColours.Add(FVector(66,  130, 150));		//Rn
+	atomColours.Add(FVector(255, 132, 212));		//Og  Default Pink
+	atomColours.Add(FVector(255, 128, 0));			//P
+	atomColours.Add(FVector(255, 255, 48));			//S
+	atomColours.Add(FVector(255, 181, 181));		//B
+	atomColours.Add(FVector(204, 128, 255));		//Li
+	atomColours.Add(FVector(171, 92,  242));		//Na
+	atomColours.Add(FVector(143, 64,  212));		//K
+	atomColours.Add(FVector(112, 46,  176));		//Rb
+	atomColours.Add(FVector(87,  23,  143));		//Cs
+	atomColours.Add(FVector(66,  0,   102));		//Fr
+	atomColours.Add(FVector(194, 255, 0));			//Be
+	atomColours.Add(FVector(138, 255, 0));			//Mg
+	atomColours.Add(FVector(61,  255, 0));			//Ca
+	atomColours.Add(FVector(0,   255, 0));			//Sr
+	atomColours.Add(FVector(0,   201, 0));			//Ba
+	atomColours.Add(FVector(0,   125, 0));			//Ra
+	atomColours.Add(FVector(191, 194, 199));		//Ti
+	atomColours.Add(FVector(224, 102, 51));			//Fe
 }
 
 void AMolecule::SpawnTempAtoms() {
@@ -241,14 +277,18 @@ void AMolecule::SpawnAtoms() {
 		
 		if (meshPointer != nullptr) {
 			meshPointer->InstanceAtom(transform);
-			double randValue = FMath::RandRange(0, 100);
-			double rand = randValue / 100;
-			
-			meshPointer->SetCustomData(count, 0, atom.GetSerialNum(), true);
 
-			//double atomIndex = atomTypes.Find(atom.GetElementSymbol());
+			int32 atomIndex = atomTypes.Find(atom.GetElementSymbol());
 
-			meshPointer->SetCustomData(count, 1, rand, true);
+			if (!(atomIndex > atomColours.Num())) {
+				FVector atomColour = atomColours[atomIndex];
+
+				meshPointer->SetCustomData(count, 0, atomColour.X / 255, true);
+
+				meshPointer->SetCustomData(count, 1, atomColour.Y / 255, true);
+
+				meshPointer->SetCustomData(count, 2, atomColour.Z / 255, true);
+			}
 		}
 		//UE_LOG(LogTemp, Log, TEXT("name: %s"), *test);	
 		count++;

@@ -46,17 +46,19 @@ public:
 
 	void SetAtomTypes();
 
+	void SetAtomColours();
+
 	void SpawnTempAtoms();
 
 	void RemoveTempAtoms();
 
 	TArray<AActor*> tempAtoms;
 
-	FString moleculeName = "1111";
-
 	TArray<Atom> atoms;
 
 	int32 atomCount;
+
+	FString moleculeName = "3nir";
 
 	int32 simulationScale = 50;
 
@@ -69,6 +71,8 @@ public:
 	bool renderConnections = true;
 
 	TArray<FString> atomTypes;
+
+	TArray<FVector> atomColours;
 
 protected:
 	// Called when the game starts or when spawned
