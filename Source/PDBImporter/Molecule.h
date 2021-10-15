@@ -44,6 +44,14 @@ public:
 	UPROPERTY()
 	AActor* instancedStaticMeshActor;
 
+	void SetAtomTypes();
+
+	void SpawnTempAtoms();
+
+	void RemoveTempAtoms();
+
+	TArray<AActor*> tempAtoms;
+
 	FString moleculeName = "1111";
 
 	TArray<Atom> atoms;
@@ -59,6 +67,8 @@ public:
 	double connectionThickness = 0.1f;
 
 	bool renderConnections = true;
+
+	TArray<FString> atomTypes;
 
 protected:
 	// Called when the game starts or when spawned

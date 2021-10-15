@@ -29,13 +29,18 @@ void AMolecule::BeginPlay()
 
 	meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
 
+	this->SetAtomTypes();
+
 	this->ConvertPDB(moleculeName);
 	this->SetAtomSizes();
 
-	this->SpawnAtoms();
-
-	if (renderConnections)
+	if (renderConnections) {
+		this->SpawnTempAtoms();
 		this->SpawnConnections();
+		this->RemoveTempAtoms();
+	}
+
+	this->SpawnAtoms();
 }
 
 // Called every frame
@@ -82,6 +87,57 @@ void AMolecule::SetAtomSizes() {
 			atoms[i].SetRadius((FCString::Atod(*radiusString)) / 0.775f);
 			//UE_LOG(LogTemp, Warning, TEXT("radius: %lf"), radiusDouble);
 		}
+	}
+}
+
+void AMolecule::SetAtomTypes() {
+	atomTypes.Add(TEXT("H"));
+	atomTypes.Add(TEXT("C"));
+	atomTypes.Add(TEXT("N"));
+	atomTypes.Add(TEXT("O"));
+	atomTypes.Add(TEXT("F"));
+	atomTypes.Add(TEXT("Cl"));
+	atomTypes.Add(TEXT("Br"));
+	atomTypes.Add(TEXT("I"));
+	atomTypes.Add(TEXT("He"));
+	atomTypes.Add(TEXT("Ne"));
+	atomTypes.Add(TEXT("Ar"));
+	atomTypes.Add(TEXT("Kr"));
+	atomTypes.Add(TEXT("Xe"));
+	atomTypes.Add(TEXT("Rn"));
+	atomTypes.Add(TEXT("Og"));
+	atomTypes.Add(TEXT("P"));
+	atomTypes.Add(TEXT("S"));
+	atomTypes.Add(TEXT("B"));
+	atomTypes.Add(TEXT("Li"));
+	atomTypes.Add(TEXT("Na"));
+	atomTypes.Add(TEXT("K"));
+	atomTypes.Add(TEXT("Rb"));
+	atomTypes.Add(TEXT("Cs"));
+	atomTypes.Add(TEXT("Fr"));
+	atomTypes.Add(TEXT("Be"));
+	atomTypes.Add(TEXT("Mg"));
+	atomTypes.Add(TEXT("Ca"));
+	atomTypes.Add(TEXT("Sr"));
+	atomTypes.Add(TEXT("Ba"));
+	atomTypes.Add(TEXT("Ra"));
+	atomTypes.Add(TEXT("Ti"));
+	atomTypes.Add(TEXT("Fe"));
+}
+
+void AMolecule::SpawnTempAtoms() {
+	for (Atom atom : atoms) {
+		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
+		double size = atom.GetRadius();
+
+		this->SpawnSphere(position, size, atom.GetElementSymbol());
+	}
+}
+
+void AMolecule::RemoveTempAtoms() {
+	for (AActor* actor : tempAtoms) {
+		if (actor != nullptr)
+			actor->Destroy();
 	}
 }
 
@@ -186,10 +242,13 @@ void AMolecule::SpawnAtoms() {
 		if (meshPointer != nullptr) {
 			meshPointer->InstanceAtom(transform);
 			double randValue = FMath::RandRange(0, 100);
-			UE_LOG(LogTemp, Log, TEXT("value1: %d"), randValue);
 			double rand = randValue / 100;
-			UE_LOG(LogTemp, Log, TEXT("value2: %d"), rand);
-			meshPointer->SetCustomData(count, 0, rand, true);
+			
+			meshPointer->SetCustomData(count, 0, atom.GetSerialNum(), true);
+
+			//double atomIndex = atomTypes.Find(atom.GetElementSymbol());
+
+			meshPointer->SetCustomData(count, 1, rand, true);
 		}
 		//UE_LOG(LogTemp, Log, TEXT("name: %s"), *test);	
 		count++;
@@ -211,9 +270,12 @@ void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {
 	atomName.Append(CountString);
 
 	SpawnedActorRef->SetActorLabel( atomName );					//Setting Label
+
+	tempAtoms.Add(SpawnedActorRef);
 }
 
 void AMolecule::SpawnConnections() {
+
 	int32 connectionCount = 0;
 
 	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
@@ -235,8 +297,7 @@ void AMolecule::SpawnConnections() {
 		for (AActor* overlappedActor : outActors) {
 			FString overlappedName = overlappedActor->GetName();
 			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), *overlappedActor->GetActorTransform().GetScale3D().ToString());
-			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), meshPointer->setcustom);
-			if (overlappedName.Contains("ATOM")) {
+			if (overlappedName.Contains("Atom")) {
 				
 				FString Left, Right;
 				overlappedName.Split(TEXT("_"), &Left, &Right);
