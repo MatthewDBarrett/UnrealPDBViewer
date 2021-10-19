@@ -69,6 +69,8 @@ public:
 	double connectionThickness = 0.1f;
 
 	bool renderConnections = true;
+	
+	bool renderHETAtoms = false;
 
 	TArray<FString> atomTypes;
 

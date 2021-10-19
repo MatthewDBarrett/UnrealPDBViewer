@@ -128,7 +128,7 @@ void AMolecule::SetAtomTypes() {
 
 void AMolecule::SetAtomColours() {
 	atomColours.Add(FVector(255, 255, 255));		//H
-	atomColours.Add(FVector(144, 144, 144));		//C
+	atomColours.Add(FVector(40,  40,  40));			//C  CPK is 144,144,144
 	atomColours.Add(FVector(48,  80,  248));		//N
 	atomColours.Add(FVector(255, 13,  13));			//O
 	atomColours.Add(FVector(144, 224, 80));			//F
@@ -211,7 +211,10 @@ void AMolecule::ConvertPDB(FString fileName) {
 		atomData.ParseIntoArray(stringRecords, TEXT(" "), true);
 
 		for (int32 i = 0; i < stringRecords.Num(); i++) {
-			if (stringRecords[i].Contains("ATOM") || stringRecords[i].Contains("ANI@SOU") || stringRecords[i].Contains("HET@ATM")) {
+			FString hetString = TEXT("HET@ATM");
+			if (renderHETAtoms)
+				hetString = TEXT("HETATM");
+			if (stringRecords[i].Contains("ATOM") || stringRecords[i].Contains("ANI@SOU") || stringRecords[i].Contains(hetString)) {
 				if (stringRecords[i + 1].IsNumeric()) {
 					for (int j = 1; j < 7; j++) {
 
@@ -280,7 +283,7 @@ void AMolecule::SpawnAtoms() {
 
 			int32 atomIndex = atomTypes.Find(atom.GetElementSymbol());
 
-			if (!(atomIndex > atomColours.Num())) {
+			if ( (atomIndex - 1) < atomColours.Num() ) {
 				FVector atomColour = atomColours[atomIndex];
 
 				meshPointer->SetCustomData(count, 0, atomColour.X / 255, true);
