@@ -19,6 +19,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ConvertPDB(FString fileName);
 
+	UFUNCTION(BlueprintCallable)
+	void SetFileName(FString fileName);
+
 	bool isConnection(Atom a, Atom b);
 
 	void SpawnAtoms();
@@ -62,13 +65,17 @@ public:
 
 	double PositionsToRotation(FVector posA, FVector posB);
 
+	void CreateMolecule();
+
+	bool MoleculeCreated = false;
+
 	TArray<AActor*> tempAtoms;
 
 	TArray<Atom> atoms;
 
 	int32 atomCount;
 
-	FString moleculeName = "1bna";
+	FString moleculeName = "";
 
 	int32 simulationScale = 50;
 

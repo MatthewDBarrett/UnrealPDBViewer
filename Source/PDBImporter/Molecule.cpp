@@ -21,7 +21,34 @@ AMolecule::AMolecule()
 void AMolecule::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+// Called every frame
+void AMolecule::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+
+	if (MoleculeCreated == false) {
+		UE_LOG(LogTemp, Log, TEXT("moleculeCreated: %s"), *moleculeName);
+		if (moleculeName != "") {
+			this->CreateMolecule();
+			MoleculeCreated = true;
+		}
+	}
+}
+
+bool is_number(const std::string& s)
+{
+	char* end = nullptr;
+	double val = strtod(s.c_str(), &end);
+	return end != s.c_str() && *end == '\0' && val != HUGE_VAL;
+}
+
+bool has_any_digits(const std::string& s)
+{
+	return std::any_of(s.begin(), s.end(), ::isdigit);
+}
+
+void AMolecule::CreateMolecule() {
 	FActorSpawnParameters SpawnParams;
 	FVector pos = FVector(0, 0, 0);
 	FRotator rot = FRotator(0, 0, 0);
@@ -45,25 +72,6 @@ void AMolecule::BeginPlay()
 	}
 
 	this->SpawnAtoms();
-}
-
-// Called every frame
-void AMolecule::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-bool is_number(const std::string& s)
-{
-	char* end = nullptr;
-	double val = strtod(s.c_str(), &end);
-	return end != s.c_str() && *end == '\0' && val != HUGE_VAL;
-}
-
-bool has_any_digits(const std::string& s)
-{
-	return std::any_of(s.begin(), s.end(), ::isdigit);
 }
 
 void AMolecule::SetAtomSizes() {
@@ -92,6 +100,10 @@ void AMolecule::SetAtomSizes() {
 			//UE_LOG(LogTemp, Warning, TEXT("radius: %lf"), radiusDouble);
 		}
 	}
+}
+
+void AMolecule::SetFileName(FString fileName) {
+	moleculeName = fileName;
 }
 
 void AMolecule::SetAtomTypes() {
