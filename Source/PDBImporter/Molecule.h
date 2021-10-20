@@ -22,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetFileName(FString fileName);
 
+	UFUNCTION(BlueprintCallable)
+	void SetAtomSize(float size);
+
 	bool isConnection(Atom a, Atom b);
 
 	void SpawnAtoms();
@@ -64,6 +67,8 @@ public:
 	void RemoveTempAtoms();
 
 	void CreateMolecule();
+
+	void CreateNonStandardConnections();
 
 	bool MoleculeCreated = false;
 

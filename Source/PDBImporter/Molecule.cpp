@@ -69,9 +69,41 @@ void AMolecule::CreateMolecule() {
 		this->SpawnTempAtoms();
 		this->SpawnConnections();
 		this->RemoveTempAtoms();
+		//this->CreateNonStandardConnections();
 	}
 
 	this->SpawnAtoms();
+}
+
+void AMolecule::CreateNonStandardConnections() {
+	FString directory = FPaths::ProjectContentDir();
+	FString atomData;
+	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
+
+	if (file.CreateDirectory(*directory)) {
+		FString myFile = directory + "/" + moleculeName + ".pdb";
+		FFileHelper::LoadFileToString(atomData, *myFile);
+
+		TArray<FString> stringRecords;
+		atomData.ParseIntoArray(stringRecords, TEXT(" "), true);
+
+		for (int32 i = 0; i < stringRecords.Num(); i++) {
+			if (stringRecords[i].Contains("CONECT")) {
+				for (int32 j = 1; j < 20; j++) {
+					if (stringRecords[i + j + 1].Contains("MASTER") || stringRecords[i + j + 1].Contains("CONECT"))
+						break;
+
+						if (FCString::Atoi(*stringRecords[i + j]) <= atoms.Num() && FCString::Atoi(*stringRecords[i + j + 1]) <= atoms.Num()) {			//if the atom has been displayed (incase HET atoms not being shown)
+							//UE_LOG(LogTemp, Log, TEXT("StringA: %s"), *stringRecords[i + j]);
+							//UE_LOG(LogTemp, Log, TEXT("StringB: %s"), *stringRecords[i + j + 1]);
+							FVector atomA = atoms[FCString::Atoi(*stringRecords[i + j]) - 1].GetPosition();
+							FVector atomB = atoms[FCString::Atoi(*stringRecords[i + j + 1]) - 1].GetPosition();
+							this->SpawnCylinder(atomA * simulationScale, atomB * simulationScale);
+						}
+				}
+			}
+		}
+	}
 }
 
 void AMolecule::SetAtomSizes() {
@@ -192,6 +224,14 @@ void AMolecule::RemoveTempAtoms() {
 	}
 }
 
+void AMolecule::SetAtomSize(float size) {
+	atomScale = size/100;
+
+	if (MoleculeCreated == true) {
+		this->SpawnAtoms();
+	}
+}
+
 bool AMolecule::isConnection(Atom a, Atom b) {
 	double aRadius = a.GetRadius()/2;
 	double bRadius = b.GetRadius()/2;
@@ -284,7 +324,7 @@ void AMolecule::SpawnAtoms() {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
 		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
-		double size = ( atom.GetRadius() / atomScale ) * simulationScale;
+		double size = ((1/atom.GetRadius()) * atomScale) * simulationScale;
 
 		//this->SpawnSphere(position, size, atom.GetElementSymbol());
 		
@@ -385,8 +425,9 @@ void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {
 	rotation = FRotator(rotation.Pitch + 90, rotation.Yaw, rotation.Roll);
 
 	double thickness = connectionThickness / 10;
+	//double length = FVector::Distance(atomPos1/simulationScale, atomPos2/simulationScale);
 	double length = FVector::Distance(atomPos1, atomPos2) / simulationScale;
-	FVector scale = FVector( thickness, thickness, length/5);
+	FVector scale = FVector( thickness, thickness, length/4);
 
 	FTransform transform = FTransform(rotation, position, scale);
 	
