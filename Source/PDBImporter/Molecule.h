@@ -63,8 +63,6 @@ public:
 
 	void RemoveTempAtoms();
 
-	double PositionsToRotation(FVector posA, FVector posB);
-
 	void CreateMolecule();
 
 	bool MoleculeCreated = false;
@@ -83,7 +81,7 @@ public:
 
 	int32 searchBuffer = 10;
 
-	double connectionThickness = 0.1f;
+	double connectionThickness = 1.0f;
 
 	bool renderConnections = true;
 	
