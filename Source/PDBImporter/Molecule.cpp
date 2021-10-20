@@ -324,7 +324,7 @@ void AMolecule::SpawnAtoms() {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
 		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
-		double size = ((1/atom.GetRadius()) * atomScale) * simulationScale;
+		double size = (atom.GetRadius() * atomScale) * simulationScale;
 
 		//this->SpawnSphere(position, size, atom.GetElementSymbol());
 		
