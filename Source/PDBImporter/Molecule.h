@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Atom.h"
 #include "InstancedStaticMeshActor.h"
+#include "CylinderISMA.h"
 #include "Molecule.generated.h"
 
 UCLASS()
@@ -34,15 +35,22 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> StaticMeshToSpawn;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	TSubclassOf<AActor> CylinderStaticMeshToSpawn;
+
 	TArray<FString> atomNames;
 	TArray<double> atomSizes;
 
 	AInstancedStaticMeshActor* meshPointer;
+	ACylinderISMA* cylinderMeshPointer;
 
 	void SetAtomSizes();
 
 	UPROPERTY()
 	AActor* instancedStaticMeshActor;
+
+	UPROPERTY()
+	AActor* cylinderISMA;
 
 	void SetAtomTypes();
 
@@ -52,13 +60,15 @@ public:
 
 	void RemoveTempAtoms();
 
+	double PositionsToRotation(FVector posA, FVector posB);
+
 	TArray<AActor*> tempAtoms;
 
 	TArray<Atom> atoms;
 
 	int32 atomCount;
 
-	FString moleculeName = "3nir";
+	FString moleculeName = "1ezg";
 
 	int32 simulationScale = 50;
 

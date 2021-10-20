@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "InstancedStaticMeshActor.h"
+#include "CylinderISMA.h"
 
 // Sets default values
 AMolecule::AMolecule()
@@ -26,8 +27,10 @@ void AMolecule::BeginPlay()
 	FRotator rot = FRotator(0, 0, 0);
 
 	instancedStaticMeshActor = GetWorld()->SpawnActor<AActor>(StaticMeshToSpawn, pos, rot, SpawnParams);
+	cylinderISMA = GetWorld()->SpawnActor<AActor>(CylinderStaticMeshToSpawn, pos, rot, SpawnParams);
 
 	meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
+	cylinderMeshPointer = Cast<ACylinderISMA>(cylinderISMA);
 
 	this->SetAtomTypes();
 	this->SetAtomColours();
@@ -175,6 +178,20 @@ void AMolecule::RemoveTempAtoms() {
 		if (actor != nullptr)
 			actor->Destroy();
 	}
+}
+
+double AMolecule::PositionsToRotation(FVector posA, FVector posB) {
+	float multiply = FVector::DotProduct(posA, posB);							// a.b
+
+	double aAbsolute = pow(posA.X, 2) + pow(posA.Y, 2) + pow(posA.Z, 2);		// |a|
+	aAbsolute = sqrt(aAbsolute);
+
+	double bAbsolute = pow(posB.X, 2) + pow(posB.Y, 2) + pow(posB.Z, 2);		// |b|
+	bAbsolute = sqrt(bAbsolute);
+
+	float result = multiply / (aAbsolute - bAbsolute);							//cosTheta = a.b / |a| - |b|
+
+	return result;
 }
 
 bool AMolecule::isConnection(Atom a, Atom b) {
@@ -364,6 +381,26 @@ void AMolecule::SpawnConnections() {
 }
 
 void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {
+
+	//double angle = this->PositionsToRotation(atomPos1 , atomPos2 );
+
+	//FVector angle = (atomPos1 / simulationScale) - (atomPos1 / simulationScale);
+	//FRotator rotation = FRotationMatrix::MakeFromX(angle).Rotator();
+
+	//FVector position = FVector((atomPos1.X + atomPos2.X) / 2, (atomPos1.Y + atomPos2.Y) / 2, (atomPos1.Z + atomPos2.Z) / 2);
+
+	//FRotator rot = FRotator(angle, 0, 0);
+	//double thickness = (connectionThickness * simulationScale) / 50;
+	//FVector scale = FVector( thickness, thickness, FVector::Distance(atomPos1, atomPos2)/simulationScale);
+
+	//FTransform transform = FTransform(rot, position, scale);
+	
+	//if (cylinderMeshPointer != nullptr) {
+	//	cylinderMeshPointer->InstanceConnection(transform);
+	//}
+
+	//UE_LOG(LogTemp, Log, TEXT("angle: %lf"), angle);
+
 	DrawDebugLine(GetWorld(), atomPos1, atomPos2, FColor::White, true, -1, 0, connectionThickness * simulationScale);
 }
 
