@@ -78,11 +78,11 @@ public:
 
 	int32 atomCount;
 
-	FString moleculeName = "";
+	FString moleculeName = "1bna";
 
 	int32 simulationScale = 50;
 
-	double atomScale = 200;
+	double atomScale = 0.007f;
 
 	int32 searchBuffer = 10;
 

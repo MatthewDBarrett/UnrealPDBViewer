@@ -72,3 +72,27 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+WindowsNoEditor/PDBImporter/Saved/Logs/PDBImporter.log
+WindowsNoEditor/PDBImporter/Saved/Logs/PDBImporter-backup-2021.10.21-14.16.20.log
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/VariantManagerContent.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Synthesis.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Scalability.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/RuntimeOptions.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/PhysXVehicles.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Paper2D.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Niagara.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/MagicLeapLightEstimation.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/MagicLeap.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Input.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Hardware.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/GameUserSettings.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Game.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Engine.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/EditorScriptingUtilities.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/DeviceProfiles.ini
+WindowsNoEditor/PDBImporter/Saved/Config/WindowsNoEditor/Compat.ini
+WindowsNoEditor/PDBImporter/Saved/Config/CrashReportClient/UE4CC-Windows-DCCF1A904BF136529B396CBD1A99C860/CrashReportClient.ini
+WindowsNoEditor/PDBImporter/Saved/Config/CrashReportClient/UE4CC-Windows-BBFAD86D49BC163FD1484DAB189A8D72/CrashReportClient.ini
+WindowsNoEditor/PDBImporter/Content/Paks/PDBImporter-WindowsNoEditor.pak
+WindowsNoEditor/Manifest_NonUFSFiles_Win64.txt
+WindowsNoEditor/Engine/Saved/Config/WindowsNoEditor/Manifest.ini

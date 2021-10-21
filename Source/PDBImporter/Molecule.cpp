@@ -1,5 +1,4 @@
 #include "Molecule.h"
-#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Components/LineBatchComponent.h"
 #include "Engine/World.h"
 #include "Components/StaticMeshComponent.h"
@@ -367,7 +366,7 @@ void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {
 	FString CountString = FString::FromInt(atomCount);
 	atomName.Append(CountString);
 
-	SpawnedActorRef->SetActorLabel( atomName );					//Setting Label
+	//SpawnedActorRef->SetActorLabel( atomName );					//Setting Label
 
 	tempAtoms.Add(SpawnedActorRef);
 }
@@ -395,12 +394,17 @@ void AMolecule::SpawnConnections() {
 		for (AActor* overlappedActor : outActors) {
 			FString overlappedName = overlappedActor->GetName();
 			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), *overlappedActor->GetActorTransform().GetScale3D().ToString());
-			if (overlappedName.Contains("Atom")) {
-				
+			if (overlappedName.Contains("SpawnableSphere")) {
 				FString Left, Right;
-				overlappedName.Split(TEXT("_"), &Left, &Right);
+				overlappedName.Split(TEXT("C_"), &Left, &Right);
 
-				int32 overlappedIndex = (FCString::Atoi(*Right) - 1);
+				int32 overlappedIndex = 0;
+				
+				if (Right != "") {			//index is not 0
+					overlappedIndex = FCString::Atoi(*Right);
+				}
+
+				//UE_LOG(LogTemp, Warning, TEXT("index: %d"), overlappedIndex);
 
 				if (overlappedIndex < atom.GetSerialNum()) {
 					if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
@@ -415,7 +419,7 @@ void AMolecule::SpawnConnections() {
 	}
 
 
-	UE_LOG(LogTemp, Warning, TEXT("connections: %d"), connectionCount);
+	//UE_LOG(LogTemp, Warning, TEXT("connections: %d"), connectionCount);
 }
 
 void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {
