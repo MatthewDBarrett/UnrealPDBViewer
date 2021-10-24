@@ -23,6 +23,9 @@ public:
 	void SetFileName(FString fileName);
 
 	UFUNCTION(BlueprintCallable)
+	void RemoveInitialAtoms();
+
+	UFUNCTION(BlueprintCallable)
 	void SetAtomSize(float size);
 
 	bool isConnection(Atom a, Atom b);

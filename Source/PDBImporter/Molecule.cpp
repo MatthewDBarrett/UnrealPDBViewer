@@ -67,11 +67,11 @@ void AMolecule::CreateMolecule() {
 	if (renderConnections) {
 		this->SpawnTempAtoms();
 		this->SpawnConnections();
-		this->RemoveTempAtoms();
+		//this->RemoveTempAtoms();
 		//this->CreateNonStandardConnections();
 	}
 
-	this->SpawnAtoms();
+	//this->SpawnAtoms();
 }
 
 void AMolecule::CreateNonStandardConnections() {
@@ -135,6 +135,13 @@ void AMolecule::SetAtomSizes() {
 
 void AMolecule::SetFileName(FString fileName) {
 	moleculeName = fileName;
+}
+
+void AMolecule::RemoveInitialAtoms() {
+	for (AActor* actor : tempAtoms) {
+		if (actor != nullptr)
+			actor->Destroy();
+	}
 }
 
 void AMolecule::SetAtomTypes() {
@@ -351,7 +358,6 @@ void AMolecule::SpawnAtoms() {
 		count++;
 	}
 	meshPointer->RemoveInitialInstance();
-
 }
 
 void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {
