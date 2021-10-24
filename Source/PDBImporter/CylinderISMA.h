@@ -14,7 +14,8 @@ public:
 
 	void InstanceConnection(FTransform instanceTransform);
 
-	UPROPERTY(VisibleAnywhere)
+	//UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleDefaultsOnly)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;
 
 protected:

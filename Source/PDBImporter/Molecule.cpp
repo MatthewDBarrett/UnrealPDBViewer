@@ -210,7 +210,7 @@ void AMolecule::SetAtomColours() {
 void AMolecule::SpawnTempAtoms() {
 	for (Atom atom : atoms) {
 		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
-		double size = atom.GetRadius();
+		double size = ((atom.GetRadius() * atomScale) * simulationScale);
 
 		this->SpawnSphere(position, size, atom.GetElementSymbol());
 	}
@@ -360,13 +360,13 @@ void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {
 	atomCount++;
 
 	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, position, rotation, SpawnParams);
-	SpawnedActorRef->SetActorScale3D(FVector((size / atomScale) * simulationScale));
+	SpawnedActorRef->SetActorScale3D(FVector((size )));
 
 	atomName.Append( "-Atom_" );							//String Formatting
 	FString CountString = FString::FromInt(atomCount);
 	atomName.Append(CountString);
 
-	//SpawnedActorRef->SetActorLabel( atomName );					//Setting Label
+	SpawnedActorRef->Tags.Add(FName(atomName));				//Setting Label
 
 	tempAtoms.Add(SpawnedActorRef);
 }
@@ -386,31 +386,27 @@ void AMolecule::SpawnConnections() {
 
 	for (Atom atom : atoms) {
 		searchRadius = ( atom.GetRadius() * 2 ) * simulationScale;
-		//UE_LOG(LogTemp, Log, TEXT("atomRadius: %lf searchRadius: %lf"), atom.GetRadius() ,searchRadius);
 		atomPosition = atom.GetPosition() * simulationScale;
 
 		UKismetSystemLibrary::SphereOverlapActors(GetWorld(), atomPosition, searchRadius, traceObjectTypes, seekClass, ignoreActors, outActors);
 
 		for (AActor* overlappedActor : outActors) {
-			FString overlappedName = overlappedActor->GetName();
-			//UE_LOG(LogTemp, Log, TEXT("OverlappedActor: %s"), *overlappedActor->GetActorTransform().GetScale3D().ToString());
-			if (overlappedName.Contains("SpawnableSphere")) {
-				FString Left, Right;
-				overlappedName.Split(TEXT("C_"), &Left, &Right);
+			if (overlappedActor->Tags.Num() != 0) {
+				FString overlappedName = overlappedActor->Tags[0].ToString();
 
-				int32 overlappedIndex = 0;
-				
-				if (Right != "") {			//index is not 0
-					overlappedIndex = FCString::Atoi(*Right);
-				}
+				if (overlappedName.Contains("Atom")) {
 
-				//UE_LOG(LogTemp, Warning, TEXT("index: %d"), overlappedIndex);
+					FString Left, Right;
+					overlappedName.Split(TEXT("_"), &Left, &Right);
 
-				if (overlappedIndex < atom.GetSerialNum()) {
-					if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
-						if (this->isConnection(atom, atoms[overlappedIndex])) {
-							connectionCount++;
-							this->SpawnCylinder(atom.GetPosition() * simulationScale, atoms[overlappedIndex].GetPosition() * simulationScale);
+					int32 overlappedIndex = (FCString::Atoi(*Right) - 1);
+
+					if (overlappedIndex < atom.GetSerialNum()) {
+						if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
+							if (this->isConnection(atom, atoms[overlappedIndex])) {
+								connectionCount++;
+								this->SpawnCylinder(atom.GetPosition() * simulationScale, atoms[overlappedIndex].GetPosition() * simulationScale);
+							}
 						}
 					}
 				}

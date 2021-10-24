@@ -13,13 +13,18 @@ public:
 
 	AInstancedStaticMeshActor();
 
+	UInstancedStaticMeshComponent *ISMComp;
+
 	void InstanceAtom(FTransform instanceTransform);
 
 	void RemoveInitialInstance();
 
 	void SetCustomData(int32 index, int32 dataIndex, double dataValue, bool stateDirty);
 
-	UPROPERTY(VisibleAnywhere)
+	UStaticMesh* StaticMesh;
+
+	//UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleDefaultsOnly)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;
 
 protected:

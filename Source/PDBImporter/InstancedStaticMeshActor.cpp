@@ -11,7 +11,6 @@ AInstancedStaticMeshActor::AInstancedStaticMeshActor() {
 }
 
 void AInstancedStaticMeshActor::InstanceAtom(FTransform instanceTransform) {
-	//InstancedStaticMeshComponent->SetCustomDataValue(0, 1.0f, 0, true);
 	InstancedStaticMeshComponent->AddInstance( instanceTransform );
 }
 
