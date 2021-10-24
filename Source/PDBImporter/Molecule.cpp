@@ -111,7 +111,7 @@ void AMolecule::SetAtomSizes() {
 	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
 
 	if (file.CreateDirectory(*directory)) {
-		FString myFile = directory + "/atomData.art";
+		FString myFile = directory + "/" + "/PDB_Files/" + "/atomData.art";
 		FFileHelper::LoadFileToString(atomData, *myFile);
 
 		FString Split1;
@@ -252,17 +252,18 @@ bool AMolecule::isConnection(Atom a, Atom b) {
 }
 
 void AMolecule::ConvertPDB(FString fileName) {
-
 	FString directory = FPaths::ProjectContentDir();
 	FString atomData;
 	IPlatformFile& file = FPlatformFileManager::Get().GetPlatformFile();
 
 	if (file.CreateDirectory(*directory)) {
-		FString myFile = directory + "/" + fileName + ".pdb";
+		FString myFile = directory + "/" + "/PDB_Files/" + fileName + ".pdb";
 		FFileHelper::LoadFileToString(atomData, *myFile);
 
 		TArray<FString> stringRecords;
 		atomData.ParseIntoArray(stringRecords, TEXT(" "), true);
+
+		//GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, FString::FromInt(stringRecords.Num()));
 
 		for (int32 i = 0; i < stringRecords.Num(); i++) {
 			FString hetString = TEXT("HET@ATM");
@@ -319,6 +320,7 @@ void AMolecule::ConvertPDB(FString fileName) {
 
 void AMolecule::SpawnAtoms() {
 	int32 count = 1;
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::FromInt(atoms.Num()));
 	for (Atom atom : atoms) {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
@@ -414,7 +416,7 @@ void AMolecule::SpawnConnections() {
 		}
 	}
 
-
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::FromInt(connectionCount));
 	//UE_LOG(LogTemp, Warning, TEXT("connections: %d"), connectionCount);
 }
 
