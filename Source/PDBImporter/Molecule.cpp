@@ -258,6 +258,7 @@ void AMolecule::ConvertPDB(FString fileName) {
 
 	if (file.CreateDirectory(*directory)) {
 		FString myFile = directory + "/" + "/PDB_Files/" + fileName + ".pdb";
+		UE_LOG(LogTemp, Warning, TEXT("Directory: %s"), *myFile);
 		FFileHelper::LoadFileToString(atomData, *myFile);
 
 		TArray<FString> stringRecords;
