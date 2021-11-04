@@ -174,7 +174,7 @@ void AMolecule::SetAtomTypes() {
 
 void AMolecule::SetAtomColours() {
 	atomColours.Add(FVector(255, 255, 255));		//H
-	atomColours.Add(FVector(40,  40,  40));			//C  CPK is 144,144,144
+	atomColours.Add(FVector(50,  50,  50));			//C  CPK is 144,144,144
 	atomColours.Add(FVector(48,  80,  248));		//N
 	atomColours.Add(FVector(255, 13,  13));			//O
 	atomColours.Add(FVector(144, 224, 80));			//F
