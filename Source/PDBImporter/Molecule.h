@@ -35,6 +35,10 @@ public:
 
 	void SpawnCylinder(FVector atomPos1, FVector atomPos2);
 
+	void SetProteinCentre();
+
+	FVector proteinCentre;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> ActorToSpawn;
 

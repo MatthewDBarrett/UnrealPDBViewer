@@ -63,6 +63,7 @@ void AMolecule::CreateMolecule() {
 
 	this->ConvertPDB(moleculeName);
 	this->SetAtomSizes();
+	this->SetProteinCentre();
 
 	if (renderConnections) {
 		this->SpawnTempAtoms();
@@ -325,7 +326,8 @@ void AMolecule::SpawnAtoms() {
 	for (Atom atom : atoms) {
 		//UE_LOG(LogTemp, Warning, TEXT("atom Name: %s"), *atom.GetElementSymbol());
 
-		FVector position = FVector(atom.GetXPos() * simulationScale, atom.GetYPos() * simulationScale, atom.GetZPos() * simulationScale);
+		FVector position = FVector(atom.GetXPos() - proteinCentre.X, atom.GetYPos() - proteinCentre.Y, atom.GetZPos() - proteinCentre.Z);
+		position = FVector(position.X * simulationScale, position.Y * simulationScale, position.Z * simulationScale);
 		double size = (atom.GetRadius() * atomScale) * simulationScale;
 
 		//this->SpawnSphere(position, size, atom.GetElementSymbol());
@@ -408,7 +410,11 @@ void AMolecule::SpawnConnections() {
 						if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
 							if (this->isConnection(atom, atoms[overlappedIndex])) {
 								connectionCount++;
-								this->SpawnCylinder(atom.GetPosition() * simulationScale, atoms[overlappedIndex].GetPosition() * simulationScale);
+
+								FVector atomPos1 = FVector(atom.GetPosition().X - proteinCentre.X, atom.GetPosition().Y - proteinCentre.Y, atom.GetPosition().Z - proteinCentre.Z);
+								FVector atomPos2 = FVector(atoms[overlappedIndex].GetPosition().X - proteinCentre.X, atoms[overlappedIndex].GetPosition().Y - proteinCentre.Y, atoms[overlappedIndex].GetPosition().Z - proteinCentre.Z);
+
+								this->SpawnCylinder(atomPos1 * simulationScale, atomPos2 * simulationScale);
 							}
 						}
 					}
@@ -421,7 +427,7 @@ void AMolecule::SpawnConnections() {
 	//UE_LOG(LogTemp, Warning, TEXT("connections: %d"), connectionCount);
 }
 
-void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {
+void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {	
 	FVector position = FVector((atomPos1.X + atomPos2.X) / 2, (atomPos1.Y + atomPos2.Y) / 2, (atomPos1.Z + atomPos2.Z) / 2);
 
 	FRotator rotation = UKismetMathLibrary::FindLookAtRotation(position, atomPos2);
@@ -437,6 +443,21 @@ void AMolecule::SpawnCylinder(FVector atomPos1, FVector atomPos2) {
 	if (cylinderMeshPointer != nullptr) {
 		cylinderMeshPointer->InstanceConnection(transform);
 	}
+}
+
+void AMolecule::SetProteinCentre() {
+	FVector sumVector = FVector(0, 0, 0);
+
+	for (Atom atom : atoms) {
+		FVector atomPos = atom.GetPosition();
+		sumVector = FVector((sumVector.X + atomPos.X), (sumVector.Y + atomPos.Y), (sumVector.Z + atomPos.Z));
+	}
+
+	int atomNum = atoms.Num();
+
+	sumVector = FVector(sumVector.X / atomNum, sumVector.Y / atomNum, sumVector.Z / atomNum);
+
+	proteinCentre = sumVector;
 }
 
 
