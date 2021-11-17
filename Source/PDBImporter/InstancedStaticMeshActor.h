@@ -21,6 +21,8 @@ public:
 
 	void SetCustomData(int32 index, int32 dataIndex, double dataValue, bool stateDirty);
 
+	void SetPosition(FVector position);
+
 	UStaticMesh* StaticMesh;
 
 	//UPROPERTY(VisibleAnywhere)

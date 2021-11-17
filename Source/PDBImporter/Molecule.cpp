@@ -232,6 +232,13 @@ void AMolecule::SetAtomSize(float size) {
 	}
 }
 
+void AMolecule::SetPosition(FVector position) {
+	if (meshPointer != nullptr) {
+		meshPointer->SetPosition(position);
+		cylinderMeshPointer->SetPosition(position);
+	}
+}
+
 bool AMolecule::isConnection(Atom a, Atom b) {
 	double aRadius = a.GetRadius()/2;
 	double bRadius = b.GetRadius()/2;

@@ -15,6 +15,10 @@ void ACylinderISMA::InstanceConnection(FTransform instanceTransform) {
 	InstancedStaticMeshComponent->AddInstance(instanceTransform);
 }
 
+void ACylinderISMA::SetPosition(FVector position) {
+	SetActorLocation(position);
+}
+
 void ACylinderISMA::BeginPlay()
 {
 	Super::BeginPlay();

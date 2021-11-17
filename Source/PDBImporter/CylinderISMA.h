@@ -14,6 +14,8 @@ public:
 
 	void InstanceConnection(FTransform instanceTransform);
 
+	void SetPosition(FVector position);
+
 	//UPROPERTY(VisibleAnywhere)
 	UPROPERTY(VisibleDefaultsOnly)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;

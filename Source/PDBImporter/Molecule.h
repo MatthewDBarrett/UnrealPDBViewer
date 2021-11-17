@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetAtomSize(float size);
 
+	UFUNCTION(BlueprintCallable)
+	void SetPosition(FVector position);
+
 	bool isConnection(Atom a, Atom b);
 
 	void SpawnAtoms();

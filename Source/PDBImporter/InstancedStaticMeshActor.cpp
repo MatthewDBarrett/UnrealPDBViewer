@@ -1,4 +1,5 @@
 #include "InstancedStaticMeshActor.h"
+#include "GameFramework/Actor.h"
 
 AInstancedStaticMeshActor::AInstancedStaticMeshActor() {
 	PrimaryActorTick.bCanEverTick = false;
@@ -20,6 +21,10 @@ void AInstancedStaticMeshActor::RemoveInitialInstance() {
 
 void AInstancedStaticMeshActor::SetCustomData(int32 index, int32 dataIndex, double dataValue, bool stateDirty) {
 	InstancedStaticMeshComponent->SetCustomDataValue(index, dataIndex, dataValue, stateDirty);
+}
+
+void AInstancedStaticMeshActor::SetPosition(FVector position) {
+	SetActorLocation(position);
 }
 
 void AInstancedStaticMeshActor::BeginPlay() {
