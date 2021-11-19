@@ -28,7 +28,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPosition(FVector position);
 
-	bool isConnection(Atom a, Atom b);
+	UFUNCTION(BlueprintCallable)
+	FString GetFileName();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetNumAtoms();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetNumConnections();
 
 	void SpawnAtoms();
 
@@ -40,8 +47,6 @@ public:
 
 	void SetProteinCentre();
 
-	FVector proteinCentre;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> ActorToSpawn;
 
@@ -50,12 +55,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> CylinderStaticMeshToSpawn;
-
-	TArray<FString> atomNames;
-	TArray<double> atomSizes;
-
-	AInstancedStaticMeshActor* meshPointer;
-	ACylinderISMA* cylinderMeshPointer;
 
 	void SetAtomSizes();
 
@@ -77,14 +76,6 @@ public:
 
 	void CreateNonStandardConnections();
 
-	bool MoleculeCreated = false;
-
-	TArray<AActor*> tempAtoms;
-
-	TArray<Atom> atoms;
-
-	int32 atomCount;
-
 	FString moleculeName = "";
 
 	int32 simulationScale = 50;
@@ -102,6 +93,26 @@ public:
 	TArray<FString> atomTypes;
 
 	TArray<FVector> atomColours;
+
+	FVector proteinCentre;
+
+	bool isConnection(Atom a, Atom b);
+
+	TArray<FString> atomNames;
+	TArray<double> atomSizes;
+
+	AInstancedStaticMeshActor* meshPointer;
+	ACylinderISMA* cylinderMeshPointer;
+
+	bool MoleculeCreated = false;
+
+	TArray<AActor*> tempAtoms;
+
+	TArray<Atom> atoms;
+
+	int32 atomCount;
+
+	int32 connectionCount;
 
 protected:
 	// Called when the game starts or when spawned

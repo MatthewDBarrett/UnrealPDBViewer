@@ -239,6 +239,21 @@ void AMolecule::SetPosition(FVector position) {
 	}
 }
 
+FString AMolecule::GetFileName() {
+	if (moleculeName.IsEmpty())
+		return "";
+	else
+		return moleculeName;
+}
+
+int32 AMolecule::GetNumAtoms() {
+	return atomCount;
+}
+
+int32 AMolecule::GetNumConnections() {
+	return connectionCount;
+}
+
 bool AMolecule::isConnection(Atom a, Atom b) {
 	double aRadius = a.GetRadius()/2;
 	double bRadius = b.GetRadius()/2;
@@ -385,7 +400,7 @@ void AMolecule::SpawnSphere(FVector position, double size, FString atomName) {
 
 void AMolecule::SpawnConnections() {
 
-	int32 connectionCount = 0;
+	int32 connectionNum = 0;
 
 	TArray<TEnumAsByte<EObjectTypeQuery>> traceObjectTypes;
 	traceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
@@ -416,7 +431,7 @@ void AMolecule::SpawnConnections() {
 					if (overlappedIndex < atom.GetSerialNum()) {
 						if (atom.GetSerialNum() != atoms[overlappedIndex].GetSerialNum()) {				//Check that the same atom is not comparing to itself
 							if (this->isConnection(atom, atoms[overlappedIndex])) {
-								connectionCount++;
+								connectionNum++;
 
 								FVector atomPos1 = FVector(atom.GetPosition().X - proteinCentre.X, atom.GetPosition().Y - proteinCentre.Y, atom.GetPosition().Z - proteinCentre.Z);
 								FVector atomPos2 = FVector(atoms[overlappedIndex].GetPosition().X - proteinCentre.X, atoms[overlappedIndex].GetPosition().Y - proteinCentre.Y, atoms[overlappedIndex].GetPosition().Z - proteinCentre.Z);
@@ -430,6 +445,7 @@ void AMolecule::SpawnConnections() {
 		}
 	}
 
+	connectionCount = connectionNum;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::FromInt(connectionCount));
 	//UE_LOG(LogTemp, Warning, TEXT("connections: %d"), connectionCount);
 }
