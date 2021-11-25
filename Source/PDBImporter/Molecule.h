@@ -29,6 +29,9 @@ public:
 	void SetPosition(FVector position);
 
 	UFUNCTION(BlueprintCallable)
+	void SetMoleculeIndex(int32 index);
+
+	UFUNCTION(BlueprintCallable)
 	FString GetFileName();
 
 	UFUNCTION(BlueprintCallable)
@@ -113,6 +116,8 @@ public:
 	int32 atomCount;
 
 	int32 connectionCount;
+
+	int32 molIndex;
 
 protected:
 	// Called when the game starts or when spawned

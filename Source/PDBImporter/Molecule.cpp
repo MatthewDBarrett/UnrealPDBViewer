@@ -58,6 +58,11 @@ void AMolecule::CreateMolecule() {
 	meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
 	cylinderMeshPointer = Cast<ACylinderISMA>(cylinderISMA);
 
+	if (molIndex != NULL) {
+		meshPointer->SetIndex(molIndex);
+		cylinderMeshPointer->SetIndex(molIndex);
+	}
+
 	this->SetAtomTypes();
 	this->SetAtomColours();
 
@@ -237,6 +242,10 @@ void AMolecule::SetPosition(FVector position) {
 		meshPointer->SetPosition(position);
 		cylinderMeshPointer->SetPosition(position);
 	}
+}
+
+void AMolecule::SetMoleculeIndex(int32 index) {
+	molIndex = index;
 }
 
 FString AMolecule::GetFileName() {

@@ -23,6 +23,11 @@ public:
 
 	void SetPosition(FVector position);
 
+	UPROPERTY(BlueprintReadWrite, Category = MyCharacter)
+	int32 AtomsISM_index;
+
+	void SetIndex(int32 index);
+
 	UStaticMesh* StaticMesh;
 
 	//UPROPERTY(VisibleAnywhere)

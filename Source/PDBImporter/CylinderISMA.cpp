@@ -19,6 +19,8 @@ void ACylinderISMA::SetPosition(FVector position) {
 	SetActorLocation(position);
 }
 
+void ACylinderISMA::SetIndex(int32 index) { ConnectionsISM_index = index; }
+
 void ACylinderISMA::BeginPlay()
 {
 	Super::BeginPlay();

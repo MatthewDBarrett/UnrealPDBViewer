@@ -20,6 +20,11 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;
 
+	UPROPERTY(BlueprintReadWrite, Category = MyCharacter)
+	int32 ConnectionsISM_index;
+
+	void SetIndex(int32 index);
+
 protected:
 	virtual void BeginPlay() override;
 };

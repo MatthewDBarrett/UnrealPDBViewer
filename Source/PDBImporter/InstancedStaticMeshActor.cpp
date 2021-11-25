@@ -23,9 +23,9 @@ void AInstancedStaticMeshActor::SetCustomData(int32 index, int32 dataIndex, doub
 	InstancedStaticMeshComponent->SetCustomDataValue(index, dataIndex, dataValue, stateDirty);
 }
 
-void AInstancedStaticMeshActor::SetPosition(FVector position) {
-	SetActorLocation(position);
-}
+void AInstancedStaticMeshActor::SetPosition(FVector position) { SetActorLocation(position); }
+
+void AInstancedStaticMeshActor::SetIndex(int32 index) {	AtomsISM_index = index; }
 
 void AInstancedStaticMeshActor::BeginPlay() {
 	Super::BeginPlay();
