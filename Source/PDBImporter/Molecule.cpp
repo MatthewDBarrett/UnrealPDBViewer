@@ -351,6 +351,20 @@ void AMolecule::ConvertPDB(FString fileName) {
 	//return TArray<FVector>();
 }
 
+float AMolecule::GetProteinHeight() {
+	float minHeight = 10000;
+	float maxHeight = 0;
+
+	for (Atom atom : atoms) {
+		float zPos = atom.GetZPos();
+		if (zPos > maxHeight)
+			maxHeight = zPos;
+		if (zPos < minHeight)
+			minHeight = zPos;
+	}
+	return maxHeight - minHeight;
+}
+
 void AMolecule::SpawnAtoms() {
 	int32 count = 1;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::FromInt(atoms.Num()));

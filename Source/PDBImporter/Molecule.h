@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetNumConnections();
 
+	UFUNCTION(BlueprintCallable)
+	float GetProteinHeight();
+
 	void SpawnAtoms();
 
 	void SpawnSphere(FVector position, double size, FString atomName);
@@ -105,6 +108,7 @@ public:
 	TArray<double> atomSizes;
 
 	AInstancedStaticMeshActor* meshPointer;
+
 	ACylinderISMA* cylinderMeshPointer;
 
 	bool MoleculeCreated = false;
