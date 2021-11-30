@@ -31,7 +31,8 @@ public:
 	UStaticMesh* StaticMesh;
 
 	//UPROPERTY(VisibleAnywhere)
-	UPROPERTY(VisibleDefaultsOnly)
+	//UPROPERTY(VisibleDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, Category = MyCharacter)
 	UInstancedStaticMeshComponent* InstancedStaticMeshComponent;
 
 protected:
