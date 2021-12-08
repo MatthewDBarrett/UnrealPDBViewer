@@ -58,10 +58,10 @@ void AMolecule::CreateMolecule() {
 	meshPointer = Cast<AInstancedStaticMeshActor>(instancedStaticMeshActor);
 	cylinderMeshPointer = Cast<ACylinderISMA>(cylinderISMA);
 
-	if (molIndex != NULL) {
+	//if (molIndex != NULL) {
 		meshPointer->SetIndex(molIndex);
 		cylinderMeshPointer->SetIndex(molIndex);
-	}
+	//}
 
 	this->SetAtomTypes();
 	this->SetAtomColours();
